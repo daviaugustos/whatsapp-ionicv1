@@ -4,6 +4,12 @@ app.controller('LoginCtrl', function($scope, $state, $firebaseAuth, $ionicPopup,
 
     $scope.authObj = $firebaseAuth();
 
+    var firebaseUser = $scope.authObj.$getAuth();
+
+    if (firebaseUser) {
+        $state.go('tabs.usuarios');
+    }
+
     $scope.login = function(usuario) {
 
         $ionicLoading.show({template: 'Loading...'});
@@ -12,7 +18,7 @@ app.controller('LoginCtrl', function($scope, $state, $firebaseAuth, $ionicPopup,
             .then(function(firebaseUser) {
                 console.log("Signed in as:", firebaseUser.uid);
                 $ionicLoading.hide();
-                $state.go('tabs.profile');
+                $state.go('tabs.usuarios');
             }).catch(function(error) {
                 $ionicLoading.hide();
                 var alertPopup = $ionicPopup.alert({
