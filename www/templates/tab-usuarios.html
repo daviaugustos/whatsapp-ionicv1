@@ -1,0 +1,17 @@
+<ion-view title="Usuários">
+
+    <ion-content>    
+
+        <ion-list>
+
+            <ion-item class="item item-avatar" ng-repeat="usuario in usuarios | orderBy:'displayName'">
+                <img src="img/ionic.png"/>
+                <h2>{{usuario.displayName}}</h2>
+                <p>{{usuario.email}}</p>
+            </ion-item>
+
+        </ion-list>
+
+    </ion-content>
+
+</ion-view>

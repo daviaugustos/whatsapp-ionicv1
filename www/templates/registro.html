@@ -1,0 +1,27 @@
+<ion-view title="Registro">
+
+    <ion-content class="padding">    
+
+        <form name="formRegistro" ng-submit="registrar(usuario)">
+
+            <ion-list>
+
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Email</span>
+                    <input type="email" ng-model="usuario.email" required>
+                </label>
+
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Password</span>
+                    <input type="password" ng-model="usuario.password" required ng-minlength="6">
+                </label>
+
+                <button class="button button-block button-balanced" ng-disabled="formRegistro.$invalid">Salvar</button>
+
+            </ion-list>
+
+        </form>    
+
+    </ion-content>
+
+</ion-view>
