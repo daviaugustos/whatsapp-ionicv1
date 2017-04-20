@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function($scope, $state, $firebaseAuth, $ionicPopup) {
+app.controller('LoginCtrl', function($scope, $state, $firebaseAuth, $ionicPopup, $ionicLoading) {
 
     $scope.usuario = {};
 
@@ -6,11 +6,15 @@ app.controller('LoginCtrl', function($scope, $state, $firebaseAuth, $ionicPopup)
 
     $scope.login = function(usuario) {
 
+        $ionicLoading.show({template: 'Loading...'});
+
         $scope.authObj.$signInWithEmailAndPassword(usuario.email, usuario.password)
             .then(function(firebaseUser) {
                 console.log("Signed in as:", firebaseUser.uid);
+                $ionicLoading.hide();
                 $state.go('tabs.profile');
             }).catch(function(error) {
+                $ionicLoading.hide();
                 var alertPopup = $ionicPopup.alert({
                     title: 'Falha no Login',
                     template: error.message
@@ -19,7 +23,7 @@ app.controller('LoginCtrl', function($scope, $state, $firebaseAuth, $ionicPopup)
     }
 });
 
-app.controller('RegistroCtrl', function($scope, $state, $firebaseAuth, $firebaseObject) {
+app.controller('RegistroCtrl', function($scope, $state, $firebaseAuth, $firebaseObject, $ionicPopup, $ionicLoading) {
 
     $scope.usuario = {};
 
@@ -27,17 +31,26 @@ app.controller('RegistroCtrl', function($scope, $state, $firebaseAuth, $firebase
 
     $scope.registrar = function(usuario) {
 
+         $ionicLoading.show({template: 'Saving...'});
+
         $scope.authObj.$createUserWithEmailAndPassword(usuario.email, usuario.password)
             .then(function(firebaseUser) {
 
+                $ionicLoading.hide();
+
                 console.log("User " + firebaseUser.uid + " created successfully!");
-                console.log("Complete user" + JSON.stringify(firebaseUser));
 
                 addUsuario(firebaseUser);
                 $state.go('login');
 
             }).catch(function(error) {
-                console.error("Error: ", error);
+
+                $ionicLoading.hide();
+
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Falha no Registro',
+                    template: error.message
+                });
             });
     }
 
@@ -78,7 +91,7 @@ app.controller('MensagemCtrl', function($scope) {
 
 });
 
-app.controller('ProfileCtrl', function($scope, $state, $firebaseAuth, $firebaseObject) {
+app.controller('ProfileCtrl', function($scope, $state, $firebaseAuth, $firebaseObject, $ionicLoading) {
 
     $scope.authObj = $firebaseAuth();
 
@@ -92,14 +105,18 @@ app.controller('ProfileCtrl', function($scope, $state, $firebaseAuth, $firebaseO
     }
 
     $scope.atualizar = function(usuario) {
+
+        $ionicLoading.show({template: 'Saving...'});
         
         firebaseUser.updateProfile({            
             displayName: usuario.displayName
             //TODO: Atualizar Imagem...
         }).then(function(response) {
+            $ionicLoading.hide();
             console.log("ok" + response);
             atualizarUsuario(usuario.displayName);
         }, function(error) {
+            $ionicLoading.hide();
             //Error
             console.log(error);
         });
